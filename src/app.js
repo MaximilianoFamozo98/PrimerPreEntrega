@@ -1,11 +1,15 @@
-import { productManager } from "./productManager.js";
+import { productManager } from "./ProductManager.js";
+import { CartManager } from "./CartManager.js";
 import { Product } from "./Product.js";
 import express from "express";
 import { productsRoutes } from "./routes/products.routes.js";
+import { cartsRouter } from "./routes/carts.routes.js";
 const app = express();
 
 app.use(express.json());
-app.use("/products", productsRoutes);
+app.use("/api/products", productsRoutes);
+app.use("/api/carts", cartsRouter);
+
 const port = 8080;
 
 app.listen(port, (req, res) => {
