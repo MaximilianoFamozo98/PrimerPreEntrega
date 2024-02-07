@@ -1,6 +1,6 @@
 {
   "type": "module",
-  "name": "Famozo",
+  "name": "Famozo-Server",
   "version": "1.0.0",
   "description": "",
   "main": "src/app.jss",
