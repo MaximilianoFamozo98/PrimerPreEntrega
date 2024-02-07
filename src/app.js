@@ -1,7 +1,7 @@
+import express from "express";
 import { productManager } from "./ProductManager.js";
 import { CartManager } from "./CartManager.js";
 import { Product } from "./Product.js";
-import express from "express";
 import { productsRoutes } from "./routes/products.routes.js";
 import { cartsRouter } from "./routes/carts.routes.js";
 const app = express();
@@ -13,7 +13,7 @@ app.use("/api/carts", cartsRouter);
 const port = 8080;
 
 app.listen(port, (req, res) => {
-  console.log(`escuchando el puerto ${port}`);
+  console.log(`Server ok ${port}`);
 });
 
 //productos
