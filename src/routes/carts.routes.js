@@ -1,7 +1,6 @@
-import { CartManager } from "../cartManager.js";
-import { Router } from "express";
-
-const cartsRouter = Router();
+const express = require('express');
+const { CartManager } = require("../CartManager.js");
+const cartsRouter = express.Router(); // Aquí utilizamos express.Router()
 
 cartsRouter.post("/", async (req, res) => {
   try {
@@ -12,7 +11,7 @@ cartsRouter.post("/", async (req, res) => {
   }
 });
 
-cartsRouter.get(":id", async (req, res) => {
+cartsRouter.get("/:id", async (req, res) => { // Corregí aquí la ruta :id
   const id = req.params.id;
   try {
     const response = await CartManager.getCart(id);
@@ -33,4 +32,4 @@ cartsRouter.post("/:id/products/:pid", async (req, res) => {
   }
 });
 
-export { cartsRouter };
+module.exports = { cartsRouter };

@@ -1,7 +1,10 @@
-import { Router } from "express";
-import { productManager } from "../ProductManager.js";
-import { Product } from "../Product.js";
+const { Router } = require("express");
+const { ProductManager } = require("../ProductManager.js");
+const { Product } = require("../Product.js");
+
 const productsRoutes = Router();
+
+const productManager = new ProductManager("products.txt");
 
 productsRoutes.get("/", async (req, res) => {
   try {
@@ -18,11 +21,12 @@ productsRoutes.get("/", async (req, res) => {
   }
 });
 
+
 productsRoutes.get("/:id", async (req, res) => {
   const idp = req.params.id;
   const id = parseInt(idp);
   try {
-    let product = await productManager.getProductById(id);
+    let product = await ProductManager.getProductById(id);
     return res.json(product);
   } catch (error) {
     console.log(error);
@@ -41,7 +45,7 @@ productsRoutes.post("/", async (req, res) => {
       code,
       stock
     );
-    const response = await productManager.addProduct(product);
+    const response = await ProductManager.addProduct(product);
     res.json(response);
   } catch (error) {
     console.log(error);
@@ -62,7 +66,7 @@ productsRoutes.put("/:id", async (req, res) => {
       code,
       stock
     );
-    const response = await productManager.updateProduct(id, product);
+    const response = await ProductManager.updateProduct(id, product);
     res.json(response);
   } catch (error) {
     console.log(error);
@@ -74,7 +78,7 @@ productsRoutes.delete("/:id", async (req, res) => {
   const idp = req.params.id;
   const id = parseInt(idp);
   try {
-    await productManager.deleteProductById(id);
+    await ProductManager.deleteProductById(id);
     res.send("producto eliminado con exito");
   } catch (error) {
     console.log(error);
@@ -82,4 +86,4 @@ productsRoutes.delete("/:id", async (req, res) => {
   }
 });
 
-export { productsRoutes };
+module.exports = { productsRoutes };

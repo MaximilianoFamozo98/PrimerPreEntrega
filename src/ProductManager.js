@@ -1,4 +1,4 @@
-import fs from "fs";
+const fs = require('fs');
 
 class ProductManager {
   #products = [];
@@ -106,5 +106,6 @@ class ProductManager {
 }
 
 //exportacion de la clase!
-const productManager = new ProductManager("products.txt");
-export { productManager };
+const productManager = new ProductManager("../products.txt");
+
+module.exports = { ProductManager };

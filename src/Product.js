@@ -9,4 +9,4 @@ class Product {
       this.stock = stock;
     }
   }
-  export { Product };
+  module.exports = { Product };

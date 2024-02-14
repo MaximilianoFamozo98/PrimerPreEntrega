@@ -1,5 +1,6 @@
-import { log } from "console";
-import fs from "fs";
+
+const fs = require("fs");
+
 
 class cartManager {
   constructor() {
@@ -58,4 +59,4 @@ class cartManager {
 }
 //cart manager
 const CartManager = new cartManager();
-export { CartManager };
+module.exports = { CartManager };
