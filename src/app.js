@@ -8,44 +8,38 @@ const { CartManager } = require("./CartManager.js");
 const { Product } = require("./Product.js");
 const { productsRoutes } = require("./routes/products.routes.js");
 const { cartsRouter } = require("./routes/carts.routes.js");
-const routerUsers = require('./routes/users.route.js');
+const homeRouter = require('./routes/home.router.js');
 
 // Inicializamos express
 const app = express();
-const port = 8080;
+const port = 8080; 
 const server = http.createServer(app);
 
 let msjs = [];
 
 // Public
-app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname +'/public'));
 
 // Configuramos el motor de plantillas
 app.engine("handlebars", handlebars.engine()); //motor de plantilla
 app.set("views", __dirname + "/views"); // Indicamos dónde están las vistas
 app.set("view engine", "handlebars"); // Indicamos el motor de plantilla que queremos usar
 
+let arrMessage = [];
 //Socket.io
 const io = new Server(server)
 io.on("connection", (socket) => {
-  socket.emit("mensaje", "Hola cliente, bienvenido");
+  console.log("Hola nuevo cliente");
+  socket.emit("wellcome", "Bievenido Cliente nuevo");
 
-  //socket.on("mensaje2", (data) => {
-  //  console.log(data)
-  //})
-  socket.on("messajenuevo", (data) => {
-    console.log(data)
-    msjs.push(data)
-    io.sockets.emit("mensajesDelChat", msjs )
-  })
+  socket.on("new-message", (data) => {
+    arrMessage.push(data);
+    io.sockets.emit("message-all", arrMessage);
+  });
 })
 
-
-
-
-
-//Prueba pagina handebars
-app.use("/api", routerUsers);
+//Prueba pagina handebars chat coder
+app.use("/home", homeRouter);
 
 // Configuramos las rutas
 app.use(express.json());

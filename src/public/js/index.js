@@ -1,39 +1,31 @@
 const socket = io();
 
-//socket.on ("mensaje", (data) => {
-//    console.log(data)
-//    socket.emit("mensaje2", "Hola Servidor, muchas gracias")
-//})
+socket.on('message-all', (data) => {
+    console.log(data);
+    render(data)
+    let chat = document.getElementById("caja");
+    chat.scrollTop = chat.scrollHeight;
+});
 
-socket.on("mensajesDelChat", (data)=>{
-    console.log(data)
-    render (data)
-})
-
-const render = (data) => {
-  let html =  data.map(elem => {
-        return(
-            `<div>
-            <strong> ${elem.nombre} </strong>
-            <em> ${elem.text} </em>
-            </div>`
+const render  = (data) => {
+    const html = data.map(elem => {
+        return (
+            `
+            <div>
+            <strong>${elem.author}</strong> dice <em>${elem.text}</em>
+            </div> 
+            `
         )
-    }).join(" ")
+    }).join('');
 
-    document.getElementById("caja").innerHTML = html
-
+    document.getElementById("caja").innerHTML = html;
 }
 
-
-
-const addMensages = () => {
-    const msj = {
-        nombre: document.getElementById("nombre").value, //<input>
-        text: document.getElementById("texto").value,
+const addMensage = () => {
+    const msg = {
+        author: document.getElementById("name").value,    
+        text: document.getElementById("text").value
     }
-    console.log(msj)
-
-    socket.emit("messajenuevo", msj)
-
+    socket.emit("new-message", msg);
     return false
 }
