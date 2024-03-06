@@ -1,8 +1,5 @@
-
 const fs = require("fs");
-
-
-class cartManager {
+class CartManager {
   constructor() {
     this.path = "products.txt";
     this.carts = [];
