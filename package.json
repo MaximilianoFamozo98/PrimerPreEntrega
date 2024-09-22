@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/app.jss",
   "scripts": {
-    "start": "node src/app.js"
+    "start": "nodemon src/app.js"
   },
   "engines": {
     "node": "14.x"
@@ -14,6 +14,7 @@
   "dependencies": {
     "express": "^4.18.2",
     "express-handlebars": "^7.1.2",
+    "mongoose": "^8.3.1",
     "socket.io": "^4.7.4",
     "uuid": "^9.0.1"
   }

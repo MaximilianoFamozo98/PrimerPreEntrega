@@ -50,7 +50,7 @@ class ProductManager {
         console.log("producto agregado al archivo");
         return product;
       } else {
-        console.log(`El producto con código ${product.code} ya existe.`);
+        //console.log(`El producto con código ${product.code} ya existe.`);
       }
     } catch (err) {
       console.log(err);

@@ -3,12 +3,17 @@ const express = require("express");
 const http = require("http");
 const {Server} = require("socket.io");
 // Importaciones de módulos locales
-const {ProductManager} = require("./ProductManager.js");
-const { CartManager } = require("./CartManager.js");
-const { Product } = require("./Product.js");
+const {ProductManager} = require("./dao/fileSystem/ProductManager.js");
+const { CartManager } = require("./dao/fileSystem/CartManager.js");
+const { Product } = require("./dao/fileSystem/Product.js");
 const { productsRoutes } = require("./routes/products.routes.js");
 const { cartsRouter } = require("./routes/carts.routes.js");
 const homeRouter = require('./routes/home.router.js');
+
+
+const productsRoute = require("./routes/product.route.js");
+
+
 
 // Inicializamos express
 const app = express();
@@ -35,16 +40,19 @@ io.on("connection", (socket) => {
   socket.on("new-message", (data) => {
     arrMessage.push(data);
     io.sockets.emit("message-all", arrMessage);
+    // Funcion que guarde los mensajes en la base de datos
   });
 })
+
 
 //Prueba pagina handebars chat coder
 app.use("/home", homeRouter);
 
 // Configuramos las rutas
 app.use(express.json());
+app.use ("/prod", productsRoute)  // Prueba con MongoDB
 app.use("/api/products", productsRoutes);
-app.use("/api/carts", cartsRouter);
+app.use("/api/carts", cartsRouter);         //REVISAR 
 
 
 // Crear una instancia de ProductManager

@@ -1,5 +1,5 @@
 const express = require('express');
-const { CartManager } = require("../CartManager.js");
+const { CartManager } = require("../dao/fileSystem/CartManager.js");
 const cartsRouter = express.Router(); // Aquí utilizamos express.Router()
 
 cartsRouter.post("/", async (req, res) => {

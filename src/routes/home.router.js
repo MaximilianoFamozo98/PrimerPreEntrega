@@ -3,7 +3,7 @@ const { Router } = express;
 const router = new Router();
 
 
-router.get("/", (req, res) => {
+router.get("/chat", (req, res) => {
     res.render("home")
 })
 

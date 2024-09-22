@@ -1,10 +1,14 @@
 const { Router } = require("express");
-const { ProductManager } = require("../ProductManager.js");
-const { Product } = require("../Product.js");
+const { ProductManager } = require("../dao/fileSystem/ProductManager.js");
+const { Product } = require("../dao/fileSystem/Product.js");
+
 
 const productsRoutes = Router();
-
 const productManager = new ProductManager("products.txt");
+
+
+
+
 
 productsRoutes.get("/", async (req, res) => {
   try {
