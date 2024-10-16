@@ -1,64 +1,76 @@
 const ProductModel = require("./models/products.model");
 
 class ProductManager {
-  #products = [];
-  id = 1;
-  //constructor de la clase!
   constructor(ruta) {
     this.path = ruta;
   }
 
-  //funciones
-
-  // async loaded() {
-//     try {
-//       const response = await fs.promises.readFile(this.path, "utf-8");
-//       const lineas = response
-//         .split("\n")
-//         .filter((objeto) => objeto.trim() !== "");
-//       lineas.forEach((product) => {
-//         const producto = JSON.parse(product);
-//         if (
-//           !this.#products.some(
-//             (existingProduct) => existingProduct.id === producto.id
-//           )
-//         ) {
-//           this.#products.push(producto);
-//         }
-//       });
-//     } catch (err) {
-//       console.log(err);
-//     }
-//   }
-
+  // Obtener todos los productos
   async getProducts() {
-  
-  }
-
-  async addProduct({name, price, category, stock}) {
     try {
-      console.log({name, price, category, stock})
-      await ProductModel.create({name, price, category, stock})
-      return ("Producto Guardado")
+      const products = await ProductModel.find(); // Encuentra todos los productos
+      return products;  // Devuelve los productos encontrados
     } catch (error) {
-      console.log(error)
-      return (error)
+      console.log("Error obteniendo productos:", error);
+      return error;
     }
   }
 
-  async getProductById(id) {
-   
+  // Agregar un producto
+  async addProduct({ name, price, category, stock }) {
+    try {
+      console.log({ name, price, category, stock });
+      await ProductModel.create({ name, price, category, stock });
+      return "Producto Guardado";
+    } catch (error) {
+      console.log("Error guardando producto:", error);
+      return error;
+    }
   }
 
-  async updateProduct(id, product) {
- 
+  // Obtener producto por ID
+  async getProductById(id) {
+    try {
+      const product = await ProductModel.findById(id);  // Encuentra el producto por ID
+      if (!product) {
+        return "Producto no encontrado";
+      }
+      return product;  // Devuelve el producto encontrado
+    } catch (error) {
+      console.log("Error obteniendo producto:", error);
+      return error;
+    }
   }
+
+  // Actualizar producto por ID
+  async updateProduct(id, product) {
+    try {
+      const updatedProduct = await ProductModel.findByIdAndUpdate(id, product, {
+        new: true,  // Devuelve el documento actualizado
+      });
+      if (!updatedProduct) {
+        return "Producto no encontrado para actualizar";
+      }
+      return updatedProduct;
+    } catch (error) {
+      console.log("Error actualizando producto:", error);
+      return error;
+    }
+  }
+
+  // Eliminar producto por ID
   async deleteProductById(id) {
-    
+    try {
+      const deletedProduct = await ProductModel.findByIdAndDelete(id); // Elimina el producto por ID
+      if (!deletedProduct) {
+        return "Producto no encontrado para eliminar";
+      }
+      return "Producto eliminado";
+    } catch (error) {
+      console.log("Error eliminando producto:", error);
+      return error;
+    }
   }
 }
 
-//exportacion de la clase!
-//const productManager = new ProductManager("../products.txt");
-
-module.exports =  ProductManager ;
+module.exports = ProductManager;

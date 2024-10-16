@@ -1,5 +1,9 @@
-const handlebars = require("express-handlebars");
 const express = require("express");
+
+const handlebars = require("express-handlebars");
+
+
+
 const http = require("http");
 const {Server} = require("socket.io");
 // Importaciones de módulos locales
@@ -9,10 +13,8 @@ const { Product } = require("./dao/fileSystem/Product.js");
 const { productsRoutes } = require("./routes/products.routes.js");
 const { cartsRouter } = require("./routes/carts.routes.js");
 const homeRouter = require('./routes/home.router.js');
-
-
-const productsRoute = require("./routes/product.route.js");
-
+const productRoute = require("./routes/product.route.js");
+const mongoose = require('mongoose');
 
 
 // Inicializamos express
@@ -22,8 +24,11 @@ const server = http.createServer(app);
 
 let msjs = [];
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(__dirname + "/public"));
 // Public
-app.use(express.static(__dirname +'/public'));
+
 
 // Configuramos el motor de plantillas
 app.engine("handlebars", handlebars.engine()); //motor de plantilla
@@ -50,10 +55,12 @@ app.use("/home", homeRouter);
 
 // Configuramos las rutas
 app.use(express.json());
-app.use ("/prod", productsRoute)  // Prueba con MongoDB
-app.use("/api/products", productsRoutes);
+app.use ("/api/product", productRoute)  // Prueba con MongoDB
+//app.use("/api/products", productsRoutes);
 app.use("/api/carts", cartsRouter);         //REVISAR 
 
+// Conectamos a la base de datos
+mongoose.connect("mongodb+srv://famozomaximiliano:maxi43551684@proyect-myecommerce.ytfghuh.mongodb.net/ecommerce")
 
 // Crear una instancia de ProductManager
 const productManager = new ProductManager("products.txt");
@@ -61,6 +68,12 @@ const productManager = new ProductManager("products.txt");
 server.listen(port, () => {
   console.log(`Server ok ${port}`);
 });
+
+
+
+
+
+
 
 
 //productos

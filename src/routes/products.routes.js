@@ -1,12 +1,9 @@
 const { Router } = require("express");
-const { ProductManager } = require("../dao/fileSystem/ProductManager.js");
-const { Product } = require("../dao/fileSystem/Product.js");
-
+const  ProductManager  = require("../dao/db/ProductManager.js");
+const { Product } = require("../dao/db/models/products.model.js");
 
 const productsRoutes = Router();
-const productManager = new ProductManager("products.txt");
-
-
+const productManager = new ProductManager();
 
 
 
@@ -24,7 +21,6 @@ productsRoutes.get("/", async (req, res) => {
     res.send("error !!!");
   }
 });
-
 
 productsRoutes.get("/:id", async (req, res) => {
   const idp = req.params.id;
