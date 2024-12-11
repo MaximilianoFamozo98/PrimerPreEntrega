@@ -4,7 +4,8 @@
   "description": "",
   "main": "src/app.jss",
   "scripts": {
-    "start": "nodemon src/app.js"
+    "start": "nodemon src/app.js",
+    "dev": "nodemon src/app.js"
   },
   "engines": {
     "node": ">=14"
@@ -12,9 +13,11 @@
   "author": "Famozo",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "express-handlebars": "^7.1.2",
     "mongoose": "^8.7.1",
+    "morgan": "^1.10.0",
     "socket.io": "^4.7.4",
     "uuid": "^9.0.1"
   }
