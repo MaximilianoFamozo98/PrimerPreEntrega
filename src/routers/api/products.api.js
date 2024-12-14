@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { create, read } = require("../../data/mongo/managers/products.manager");
+const { create, read, update, destroy } = require("../../data/mongo/managers/products.manager");
 
 const productsApiRouter = Router();
 
@@ -18,6 +18,29 @@ productsApiRouter.get("/", async (req, res, next) => {
     try {
         const message = "PRODUCTS FOUND";
         const response = await read();
+        return res.status(200).json({ response, message});
+    } catch (error) {
+        return next(error);
+    }
+});
+
+productsApiRouter.put("/:id", async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const data = req.body;
+        const message = "PRODUCT UPDATED";
+        const response = await update(id, data);
+        return res.status(200).json({ response, message});
+    } catch (error) {
+        return next(error);
+    }
+});
+
+productsApiRouter.delete("/:id", async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const message = "PRODUCT DELETED";
+        const response = await destroy(id);
         return res.status(200).json({ response, message});
     } catch (error) {
         return next(error);

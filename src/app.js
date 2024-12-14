@@ -4,16 +4,15 @@ const morgan = require("morgan");
 const pathHandler = require("./middlewares/pathHandler.mid.js");
 const errorHandler = require("./middlewares/errorHandler.mid.js");
 const indexRouter = require("./routers/index.router.js");
-
+const cookieParser = require("cookie-parser");
+const session = require("express-session");
 
 const handlebars = require("express-handlebars");
 const http = require("http");
 const {Server} = require("socket.io");
-// Importaciones de módulos locales
-
 const mongoose = require('mongoose');
-
 const dbConnect = require("./utils/dbConnect.util.js");
+
 
 // Inicializamos express
 const app = express();
@@ -26,13 +25,18 @@ const ready = () => {
 app.listen(port, ready);
 
 let msjs = [];
-
 // Middlewares
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
+app.use(cookieParser(process.env.SECRET_KEY));
 app.use(express.static(__dirname + "/public"));
+app.use(session({
+    secret: process.env.SECRET_KEY,
+    resave: true,
+    saveUninitialized: true,
+    cookie: { maxAge: 60000 },
+}))
 
 // routers
 app.use(indexRouter); 
@@ -66,5 +70,4 @@ io.on("connection", (socket) => {
 //Prueba pagina handebars chat coder
 // app.use("/home", homeRouter); VER
 
-// Configuramos las rutas
-app.use(express.json());
+
