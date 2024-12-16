@@ -1,58 +1,58 @@
 const { Router } = require("express");
-const { create } = require("../../data/mongo/managers/users.manager.js");
+const { create, readByEmail, readById } = require("../../data/mongo/managers/users.manager.js");
 const isVerifyPassword = require("../../middlewares/isVerifyPassword.mid.js");
+const isValidUserData = require("../../middlewares/isValidUserData.mid.js");
+const isUser = require("../../middlewares/isUser.mid.js");
 const session = require("express-session");
 
 const sessionsRouter = Router();
 
-sessionsRouter.post("/register", async (req, res, next) => {
-    // middlewares para validar campos obligatorios
-    // middlewares de uuarios inexistentes
-    
+sessionsRouter.post("/register", isValidUserData, isUser, register);
+sessionsRouter.post("/login", isVerifyPassword, login)
+sessionsRouter.post("/signout", signout)
+sessionsRouter.post("/online", online)
+
+module.exports = sessionsRouter
+
+async function register(req, res, next) {
     try {
         const data = req.body;
-        const response = await create(data);
-        const message = "USER REGISTRED";
-        return res.status(201).json({ message, response });
+        const one = await create(data);
+        return res.status(201).json({ message: "USER CREATED", one_id: one._id });
     } catch (error) {
         return next(error);
     }
-});
-
-sessionsRouter.post("/login", 
-    // middlewares para verificar usuario y contraseña correctas
-    isVerifyPassword,
-     (req, res, next) => {
+}
+async function login(req, res, next) {
     try {
-        req.session.online = true;
-        req.session.email = req.body.email;
-        const message = "USER LOGGED IN";
-        return res.status(200).json({ message });
+        const { email } = req.body;
+        const one = await readByEmail(email);
+        req.session.role = one.role;
+        req.session.user_id = one._id;
+        return res.status(200).json({ message: "USER LOGGED IN", user_id: one._id });
     } catch (error) {
         return next(error);
     }
-});
-
-sessionsRouter.post("/signout", async (req, res, next) => {
+}
+function signout(req, res, next) {
     try {
-        const sessions = req.session;
         req.session.destroy();
-        return res.status(200).json({ message: "USER SIGNED OUT", sessions });
-        
+        return res.status(200).json({ message: "USER SIGNGED OUT" });
     } catch (error) {
         return next(error);
     }
-});
-
-sessionsRouter.post("/online", (req, res, next) => {
+}
+async function online(req, res, next) {
     try {
-        const sessions = req.session;
-        if (sessions.online) {
-            return res.status(200).json({ message: "USER IS ONLINE", sessions });
+        const { user_id } = req.session;
+        const one = await readById(user_id);
+        if (req.session.user_id) {
+            return res.status(200).json({ message: one.email.toUpperCase() + "USER IS ONLINE", online: true });
+        } else {
+            return res.status(400).json({ message: "USER IS NOT ONLINE", online: false });
         }
-        return res.status(401).json({ message: "INVALID CREDENTIALS" });
     } catch (error) {
         return next(error);
     }
-});
-module.exports = sessionsRouter
+}
+

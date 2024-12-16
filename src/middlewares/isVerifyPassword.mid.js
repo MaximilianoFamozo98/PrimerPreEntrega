@@ -1,9 +1,9 @@
-const { readOne } = require("../data/mongo/managers/users.manager");
+const { readByEmail } = require("../data/mongo/managers/users.manager.js");
 
 async function isVerifyPassword(req, res, next) {
     try {
         const { email, password } = req.body;
-        const one = await readOne(email);
+        const one = await readByEmail(email);
         // cerificamos que el usuario existe
         if (one) {
 
