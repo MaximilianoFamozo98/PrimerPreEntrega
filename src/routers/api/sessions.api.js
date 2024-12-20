@@ -1,14 +1,16 @@
 const { Router } = require("express");
 const { create, readByEmail, readById } = require("../../data/mongo/managers/users.manager.js");
-const isVerifyPassword = require("../../middlewares/isVerifyPassword.mid.js");
+const isValidUser  = require("../../middlewares/isValidUser.mid.js");
 const isValidUserData = require("../../middlewares/isValidUserData.mid.js");
 const isUser = require("../../middlewares/isUser.mid.js");
-const session = require("express-session");
+const  createHash  = require("../../middlewares/createHash.mid.js");
+const   VerifyHash  = require("../../middlewares/verifyHash.mid.js");
 
+const session = require("express-session");
 const sessionsRouter = Router();
 
-sessionsRouter.post("/register", isValidUserData, isUser, register);
-sessionsRouter.post("/login", isVerifyPassword, login)
+sessionsRouter.post("/register", isValidUserData, isUser, createHash, register);
+sessionsRouter.post("/login", isValidUser, VerifyHash, login)
 sessionsRouter.post("/signout", signout)
 sessionsRouter.post("/online", online)
 
